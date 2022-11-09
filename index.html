@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,viewport-fit=cover">
+    <link rel="stylesheet" href="css/main.css">
+    <title>音高提取</title>
+</head>
+<body>
+    <div class="main">
+        <h1>输入</h1>
+        <div class="selectFile button">
+            <span id="FBtnTxt">添加文件</span>
+            <input type="file" id="inputFile" accept="audio/*" multiple oninput="onSelectFile()">
+        </div>
+        <div id="Infilelist" class="list"></div>
+        <div class="button" onclick="cleanInFiles()">清空文件</div>
+        <h1>参数</h1>
+        <div class="setlist">
+            <div>
+                <span>最低响度：</span>
+                <input type="number" id="minV" max="1" min="0" step="0.001" value="0.01">
+            </div>
+            <div>
+                <span>快速傅里叶变换窗口大小：</span>
+                <select id="ffll">
+                    <option value="32">32</option>
+                    <option value="64">64</option>
+                    <option value="128">128</option>
+                    <option value="256">256</option>
+                    <option value="512">512</option>
+                    <option value="1024">1024</option>
+                    <option value="2048">2048</option>
+                    <option value="4096">4096</option>
+                    <option value="8192">8192</option>
+                    <option value="16384">16384</option>
+                    <option value="32768">32768</option>
+                </select>
+            </div>
+            <div>
+                <span>BPM</span>
+                <span>
+                    <input type="number" id="bpm" max="10000" min="1" step="1" value="120">
+                    <span></span>
+                </span>
+            </div>
+            <div>
+                <span>提取音符最小单位：</span>
+                <select id="minnotel">
+                    <option value="1">一分音符</option>
+                    <option value="2">二分音符</option>
+                    <option value="4">四分音符</option>
+                    <option value="8">八分音符</option>
+                    <option value="16">十六分音符</option>
+                    <option value="32">三十二分音符</option>
+                </select>
+            </div>
+            <div>
+                <span>输出格式：</span>
+                <select id="outputtype">
+                    <option value="0">Midi文件(.mid)</option>
+                </select>
+            </div>
+        </div>
+        <h1>计算</h1>
+        <div>
+            总进度：
+        </div>
+        <progress id="AllProg" value="1"></progress>
+        <div>
+            单文件进度：
+        </div>
+        <progress id="OneProg" value="1"></progress>
+        
+        <div class="button" id="startBtn" onclick="onStartBtn()">开始</div>
+        <h1>输出</h1>
+        
+        <div id="Outfilelist" class="list"></div>
+        <div class="button" onclick="downloadOutFiles()">下载所有</div>
+        <div class="button" onclick="cleanOutFiles()">清空输出</div>
+
+        <h1>说明</h1>
+
+        <div class="txts">
+            为了有更好的效果，快速傅里叶变换窗口大小 应该尽可能大，但是可能因为 提取音符最小单位 太小而产生副作用。（当 提取音符最小单位 最终计算的采样长度小于 快速傅里叶变换窗口大小 时可能产生副作用。）
+            <br><br>
+            提取时很难卡到音频的节奏，所以 提取音符最小单位 应该尽可能小（分的越多越小），但是过小的值可能会影响 快速傅里叶变换算法效果（采样不够）。
+            <br><br>
+            
+        </div>
+    </div>
+    <script src="js/pitchdetect.js"></script>
+    <script src="js/midiwriter.js"></script>
+    <script src="js/interaction.js"></script>
+</body>
+</html>
